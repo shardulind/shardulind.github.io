@@ -255,6 +255,16 @@
     border:1px solid var(--green-dim); padding:.25rem .7rem; border-radius:20px; font-size:.8rem;
   }
 
+  /* ---------- Open Source ---------- */
+  .proj-head{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.8rem; margin-bottom:1rem; }
+  .proj-name{ font-family:var(--font-mono); font-size:1.4rem; color:var(--text); margin:0; font-weight:700; }
+  .proj-tagline{ color:var(--text-dim); max-width:65ch; margin:0 0 1.4rem; }
+  .proj-card .tag-cloud{ margin-top:1.4rem; }
+  .proj-line{ font-family:var(--font-mono); font-size:.88rem; margin:.4rem 0; color:var(--text-dim); }
+  .proj-line.ok{ color:var(--green); }
+  .proj-line.upd{ color:var(--blue); }
+  .proj-line.skip{ color:var(--text-faint); }
+
   /* ---------- Contact ---------- */
   .term-block{
     background:var(--bg-panel); border:1px solid var(--border); border-radius:8px; padding:1.6rem 1.8rem;
@@ -325,6 +335,7 @@
         <li><a href="#about">whoami</a></li>
         <li><a href="#timeline">log</a></li>
         <li><a href="#stack">stack</a></li>
+        <li><a href="#projects">oss</a></li>
         <li><a href="#certifications">certs</a></li>
         <li><a href="#contact">contact</a></li>
       </ul>
@@ -400,6 +411,40 @@
       </div>
     </section>
 
+    <!-- ===== Open Source ===== -->
+    <section id="projects" class="section reveal">
+      <p class="eyebrow">// pip show codestamp</p>
+      <h2 class="section-title">Open source, in production.</h2>
+      <div class="proj-card">
+        <div class="proj-head">
+          <h3 class="proj-name">codestamp</h3>
+          <div class="proj-badges">
+            <span class="tag">PyPI v0.2.0</span>
+            <span class="tag">Python 3.10+</span>
+            <span class="tag">MIT License</span>
+            <span class="tag">Beta</span>
+          </div>
+        </div>
+        <p class="proj-tagline">A CLI tool that stamps and manages copyright headers across source-code files — built to run as a CI-friendly git hook, with per-language comment styles baked in. Published by Medhavee Inc.</p>
+        <div class="term-block">
+          <div class="cmd-line">codestamp --bulk --dry-run</div>
+          <div class="proj-line ok">✅ ADDED &nbsp; src/utils/parser.py</div>
+          <div class="proj-line upd">🔄 UPDATED &nbsp; src/main.go</div>
+          <div class="proj-line skip">⏭ SKIPPED &nbsp; vendor/react_helpers.js</div>
+          <div class="success-line">dry run complete · nothing written.</div>
+        </div>
+        <div class="tag-cloud">
+          <span class="tag">last-commit mode</span><span class="tag">--staged</span><span class="tag">--dry-run</span>
+          <span class="tag">exclusion globs</span><span class="tag">GitHub Actions ready</span>
+          <span class="tag">12+ languages</span>
+        </div>
+        <div class="contact-actions">
+          <a href="https://pypi.org/project/codestamp/" target="_blank" rel="noopener" class="btn btn-primary">$ pip install codestamp</a>
+          <a href="https://github.com/Medhavee-Inc/codestamp" target="_blank" rel="noopener" class="btn btn-ghost">$ git clone codestamp</a>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== Certifications ===== -->
     <section id="certifications" class="section reveal">
       <p class="eyebrow">// kubectl get certifications</p>
@@ -432,8 +477,8 @@
         <div class="success-line">Connection established.</div>
       </div>
       <div class="contact-actions">
-        <a href="mailto:shardul.kulkarni@example.com" class="btn btn-primary">$ mail --to shardul</a>
-        <a href="https://linkedin.com/in/shardulkulkarni" target="_blank" rel="noopener" class="btn btn-ghost">$ open linkedin</a>
+        <a href="mailto:shardulind@gmail.com" class="btn btn-primary">$ mail --to shardul</a>
+        <a href="https://linkedin.com/in/shardulind" target="_blank" rel="noopener" class="btn btn-ghost">$ open linkedin</a>
       </div>
     </section>
 
@@ -442,9 +487,9 @@
   <footer>
     <div>© <span id="year"></span> Shardul Kulkarni · deployed from ~/portfolio · status: operational</div>
     <div class="footer-links">
-      <a href="https://github.com/shardulkulkarni" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://linkedin.com/in/shardulkulkarni" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="mailto:shardul.kulkarni@example.com">Email</a>
+      <a href="https://github.com/shardulind" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/shardulind" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:shardulind@gmail.com">Email</a>
       <a href="#home">back to top ↑</a>
     </div>
   </footer>
