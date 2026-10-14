@@ -62,12 +62,37 @@
   html{ scroll-behavior:smooth; scroll-padding-top:var(--nav-h); }
   body{
     margin:0;
-    background:var(--bg);
+    background:
+      radial-gradient(circle at 12% 4%, rgba(88,71,255,.2), transparent 25rem),
+      radial-gradient(circle at 88% 24%, rgba(0,217,255,.1), transparent 28rem),
+      var(--bg);
     color:var(--text);
     font-family:var(--font-body);
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
+  body::before, body::after{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  }
+  body::before{
+    opacity:.66;
+    background-image:
+      radial-gradient(circle at 12% 18%, #fff 0 1px, transparent 1.6px),
+      radial-gradient(circle at 78% 10%, rgba(123,231,255,.9) 0 1px, transparent 1.6px),
+      radial-gradient(circle at 62% 42%, rgba(255,185,244,.8) 0 1px, transparent 1.6px),
+      radial-gradient(circle at 91% 68%, #fff 0 1px, transparent 1.6px),
+      radial-gradient(circle at 28% 78%, rgba(94,230,163,.8) 0 1px, transparent 1.6px);
+    background-size:173px 191px, 223px 227px, 149px 137px, 269px 251px, 307px 293px;
+    animation:starDrift 38s linear infinite;
+  }
+  body::after{
+    background:
+      radial-gradient(ellipse at 50% 105%, rgba(113,62,255,.18), transparent 42%),
+      radial-gradient(ellipse at 100% 54%, rgba(2,189,255,.08), transparent 30%);
+  }
+  body > *{ position:relative; z-index:1; }
+  @keyframes starDrift{ to{ background-position:173px -191px, -223px 227px, 149px 137px, -269px 251px, 307px -293px; } }
   body, .nav, .titlebar, .stat-card, .yaml-block, .k8s-table td, .k8s-table th,
   .term-block, .tag, .status-pill, footer, .btn-ghost, .copy-btn, .theme-toggle{
     transition:background-color .3s ease, border-color .3s ease, color .3s ease;
@@ -140,7 +165,7 @@
 
   .nav{
     position:sticky; top:0; z-index:100; background:rgba(10,14,20,.85);
-    backdrop-filter:blur(8px); border-bottom:1px solid var(--border); height:var(--nav-h);
+    backdrop-filter:blur(14px); border-bottom:1px solid rgba(110,147,184,.28); height:var(--nav-h);
   }
   .nav-inner{
     max-width:var(--maxw); margin:0 auto; height:100%; padding:0 1.5rem;
@@ -160,6 +185,12 @@
     border:1px solid var(--border); padding:.35rem .7rem; border-radius:4px; white-space:nowrap;
   }
   .theme-toggle:hover{ border-color:var(--green); color:var(--green); }
+  .mentorship-nav-cta{
+    display:inline-flex; align-items:center; justify-content:center; padding:.36rem .7rem; border:1px solid rgba(94,230,163,.72);
+    border-radius:5px; background:rgba(94,230,163,.08); color:var(--green); font-family:var(--font-mono); font-size:.72rem;
+    font-weight:700; white-space:nowrap; box-shadow:0 0 18px rgba(94,230,163,.1); transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .mentorship-nav-cta:hover{ transform:translateY(-2px); background:var(--green); color:#06110c; box-shadow:0 0 24px rgba(94,230,163,.26); }
   .nav-toggle{
     display:none; background:none; border:1px solid var(--border); color:var(--text);
     border-radius:4px; padding:.35rem .6rem; font-size:1rem;
@@ -182,13 +213,32 @@
   html.reduced-motion .reveal{ opacity:1; transform:none; transition:none; }
 
   /* ---------- Hero ---------- */
-  .hero{ padding:5rem 0 4rem; }
+  .hero{ position:relative; padding:6.5rem 0 5rem; overflow:hidden; isolation:isolate; }
+  .hero > :not(.hero-orbit){ position:relative; z-index:1; }
+  .hero-orbit{
+    position:absolute; z-index:0; right:4%; top:50%; width:min(34vw,355px); aspect-ratio:1;
+    border:1px solid rgba(106,176,243,.35); border-radius:50%; transform:translateY(-50%) rotate(-20deg);
+    box-shadow:inset 0 0 65px rgba(75,53,206,.12), 0 0 80px rgba(72,47,193,.12);
+  }
+  .hero-orbit::before, .hero-orbit::after{
+    content:''; position:absolute; border-radius:50%; border:1px solid rgba(94,230,163,.3);
+  }
+  .hero-orbit::before{ inset:15%; }
+  .hero-orbit::after{
+    width:15px; height:15px; background:var(--amber); border:0; top:6%; left:49%;
+    box-shadow:0 0 18px var(--amber), 0 0 40px rgba(242,193,78,.35); animation:orbit 10s linear infinite;
+    transform-origin:50% 44vw;
+  }
+  @keyframes orbit{ to{ rotate:360deg; } }
   .prompt-line{ font-family:var(--font-mono); color:var(--text-dim); font-size:.95rem; margin:0 0 1.2rem; }
   .prompt-line .prompt{ color:var(--green); }
   .prompt-line .path{ color:var(--blue); }
   .hero-name{
     font-family:var(--font-mono); font-weight:800; font-size:clamp(2.3rem,7vw,4.4rem);
-    margin:0; line-height:1.05; letter-spacing:-.01em;
+    margin:0; line-height:1.05; letter-spacing:-.04em;
+    background:linear-gradient(105deg, #f4fbff 8%, var(--green) 44%, #9ebdff 88%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 0 35px rgba(94,230,163,.12);
   }
   .hero-role{
     font-family:var(--font-mono); color:var(--amber); font-size:clamp(1.05rem,2.4vw,1.4rem);
@@ -198,11 +248,15 @@
   .hero-cta{ display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:2.5rem; }
   .btn{
     font-family:var(--font-mono); font-size:.9rem; padding:.8rem 1.3rem; border-radius:6px;
-    border:1px solid var(--border); transition:border-color .2s, color .2s, background .2s;
+    border:1px solid var(--border); transition:transform .2s, box-shadow .2s, border-color .2s, color .2s, background .2s;
   }
-  .btn-primary{ background:var(--green); color:#06110c; border-color:var(--green); font-weight:600; }
-  .btn-primary:hover{ background:#4fd393; }
-  .btn-ghost{ color:var(--text); }
+  .btn:hover{ transform:translateY(-3px); }
+  .btn-primary{
+    background:linear-gradient(120deg, var(--green), #73d7ff); color:#06110c; border-color:transparent; font-weight:700;
+    box-shadow:0 8px 28px rgba(94,230,163,.2);
+  }
+  .btn-primary:hover{ box-shadow:0 12px 35px rgba(94,230,163,.32); }
+  .btn-ghost{ color:var(--text); background:rgba(17,26,43,.45); }
   .btn-ghost:hover{ border-color:var(--green); color:var(--green); }
   .hero-meta{
     display:flex; flex-wrap:wrap; gap:1.6rem; font-family:var(--font-mono); font-size:.82rem; color:var(--text-faint);
@@ -213,30 +267,189 @@
   .about-text{ max-width:68ch; color:var(--text-dim); font-size:1.02rem; margin-bottom:2.2rem; }
   .stat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
   .stat-card{
-    background:var(--bg-panel); border:1px solid var(--border); border-radius:8px; padding:1.3rem 1.4rem;
+    background:linear-gradient(145deg, rgba(23,34,48,.9), rgba(15,21,28,.72)); border:1px solid rgba(113,153,193,.25); border-radius:12px; padding:1.3rem 1.4rem;
+    box-shadow:0 12px 28px rgba(0,0,0,.12); transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
   }
+  .stat-card:hover{ transform:translateY(-5px); border-color:rgba(94,230,163,.65); box-shadow:0 16px 32px rgba(26,147,166,.14); }
   .stat-card .k{ font-family:var(--font-mono); color:var(--green); font-size:1.3rem; font-weight:700; display:block; margin-bottom:.3rem; }
   .stat-card .v{ font-size:.88rem; color:var(--text-dim); }
 
   /* ---------- Timeline ---------- */
+  .journey-intro{ max-width:62ch; margin:-.6rem 0 2.2rem; color:var(--text-dim); }
   .timeline{ position:relative; padding-left:2.6rem; }
   .timeline::before{
-    content:''; position:absolute; left:7px; top:6px; bottom:6px; width:2px; background:var(--border);
+    content:''; position:absolute; left:7px; top:8px; bottom:8px; width:2px;
+    background:linear-gradient(var(--blue), var(--green), var(--amber)); box-shadow:0 0 12px rgba(106,176,243,.45);
   }
-  .t-item{ position:relative; padding-bottom:1.9rem; }
+  .t-item{ position:relative; padding-bottom:1.15rem; }
   .t-item:last-child{ padding-bottom:0; }
   .t-item::before{
-    content:''; position:absolute; left:-2.6rem; top:.35rem; width:14px; height:14px; border-radius:50%;
-    background:var(--bg); border:2px solid var(--green);
+    content:''; position:absolute; left:-2.6rem; top:1.05rem; width:14px; height:14px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--blue); box-shadow:0 0 0 4px rgba(106,176,243,.1);
   }
-  .t-item.now::before{ background:var(--green); box-shadow:0 0 0 4px rgba(94,230,163,.15); }
-  .t-year{ font-family:var(--font-mono); color:var(--amber); font-weight:700; font-size:.95rem; margin-right:.7rem; }
-  .t-branch{ color:var(--text-faint); font-family:var(--font-mono); margin-right:.4rem; }
-  .t-desc{ font-family:var(--font-mono); color:var(--text); font-size:.98rem; }
+  .t-item.now::before{ background:var(--green); border-color:var(--green); box-shadow:0 0 0 5px rgba(94,230,163,.16), 0 0 18px var(--green); }
+  .t-card{
+    position:relative; padding:1rem 1.15rem; border:1px solid rgba(113,153,193,.25); border-radius:10px;
+    background:linear-gradient(125deg, rgba(17,29,44,.82), rgba(14,19,30,.72)); transition:transform .25s ease, border-color .25s ease;
+  }
+  .t-card:hover{ transform:translateX(7px); border-color:rgba(106,176,243,.68); }
+  .t-card::before{ content:''; position:absolute; left:-9px; top:1.1rem; width:16px; height:16px; transform:rotate(45deg); background:#121d2b; border-left:1px solid rgba(113,153,193,.25); border-bottom:1px solid rgba(113,153,193,.25); }
+  .t-item.now .t-card{ border-color:rgba(94,230,163,.45); background:linear-gradient(125deg, rgba(21,51,48,.7), rgba(15,24,34,.84)); }
+  .t-topline{ position:relative; display:flex; align-items:center; gap:.7rem; margin-bottom:.35rem; }
+  .t-year{ font-family:var(--font-mono); color:var(--amber); font-weight:700; font-size:.83rem; }
+  .t-phase{ color:var(--blue); font-family:var(--font-mono); font-size:.73rem; letter-spacing:.06em; text-transform:uppercase; }
+  .t-desc{ position:relative; display:block; font-family:var(--font-mono); color:var(--text); font-size:1rem; font-weight:700; }
+  .t-detail{ position:relative; margin:.35rem 0 0; color:var(--text-dim); font-size:.88rem; }
+
+  /* ---------- Achievements ---------- */
+  .achievement-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+  .achievement-card{
+    position:relative; overflow:hidden; padding:1.5rem; border:1px solid rgba(113,153,193,.28);
+    border-radius:12px; background:linear-gradient(145deg, rgba(23,34,48,.93), rgba(15,21,28,.76));
+    box-shadow:0 12px 28px rgba(0,0,0,.12); transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .achievement-card::before{
+    content:'✦'; position:absolute; top:-1.5rem; right:.8rem; color:rgba(106,176,243,.13);
+    font-size:7rem; line-height:1; transform:rotate(18deg);
+  }
+  .achievement-card:hover{
+    transform:translateY(-5px); border-color:rgba(106,176,243,.7); box-shadow:0 16px 32px rgba(53,117,196,.16);
+  }
+  .achievement-kicker{
+    position:relative; display:block; margin-bottom:.75rem; color:var(--amber); font-family:var(--font-mono);
+    font-size:.76rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  }
+  .achievement-title{ position:relative; margin:0 0 .65rem; color:var(--text); font-family:var(--font-mono); font-size:1.08rem; line-height:1.45; }
+  .achievement-detail{ position:relative; margin:0; color:var(--text-dim); font-size:.92rem; }
+  .achievement-link{
+    position:relative; display:inline-block; margin-top:1rem; color:var(--blue); font-family:var(--font-mono); font-size:.82rem;
+  }
+  .achievement-link:hover{ color:var(--green); text-decoration:underline; }
+
+  /* ---------- Mentorship ---------- */
+  .mentorship-panel{
+    position:relative; overflow:hidden; padding:clamp(1.6rem,4vw,2.7rem); border:1px solid rgba(94,230,163,.5);
+    border-radius:16px; background:
+      radial-gradient(circle at 88% 25%, rgba(106,176,243,.2), transparent 19rem),
+      radial-gradient(circle at 6% 100%, rgba(94,230,163,.16), transparent 25rem),
+      linear-gradient(130deg, rgba(13,39,42,.94), rgba(17,21,42,.92));
+    box-shadow:0 20px 55px rgba(10,133,117,.14), inset 0 1px rgba(255,255,255,.04);
+  }
+  .mentorship-panel::before{
+    content:'✦'; position:absolute; right:5%; top:50%; color:rgba(94,230,163,.1); font-size:clamp(9rem,22vw,16rem);
+    line-height:1; transform:translateY(-50%) rotate(12deg);
+  }
+  .mentorship-content{ position:relative; max-width:65ch; }
+  .mentorship-label{
+    display:inline-flex; align-items:center; gap:.45rem; margin-bottom:.85rem; color:var(--green); font-family:var(--font-mono);
+    font-size:.76rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  }
+  .mentorship-label::before{ content:'●'; font-size:.65rem; text-shadow:0 0 12px var(--green); }
+  .mentorship-title{ margin:0 0 .75rem; color:var(--text); font-family:var(--font-mono); font-size:clamp(1.5rem,3.5vw,2.45rem); line-height:1.2; }
+  .mentorship-copy{ margin:0; color:var(--text-dim); font-size:1.03rem; }
+  .mentorship-points{ display:flex; flex-wrap:wrap; gap:.6rem; margin:1.3rem 0 1.7rem; }
+  .mentorship-point{
+    padding:.38rem .7rem; border:1px solid rgba(106,176,243,.3); border-radius:20px; color:var(--text); background:rgba(7,17,28,.35);
+    font-family:var(--font-mono); font-size:.78rem;
+  }
+  .mentorship-point::before{ content:'✦ '; color:var(--amber); }
+  .mentorship-modal{
+    position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:1.5rem;
+    background:rgba(3,7,13,.74); backdrop-filter:blur(9px); opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s ease;
+  }
+  .mentorship-modal.open{ opacity:1; visibility:visible; }
+  .mentorship-dialog{
+    position:relative; width:min(100%,580px); overflow:hidden; padding:clamp(1.5rem,5vw,2.4rem); border:1px solid rgba(94,230,163,.55);
+    border-radius:16px; background:
+      radial-gradient(circle at 90% 8%, rgba(106,176,243,.2), transparent 13rem),
+      linear-gradient(145deg, rgba(13,35,42,.98), rgba(15,19,35,.98));
+    box-shadow:0 25px 80px rgba(0,0,0,.55), 0 0 55px rgba(94,230,163,.12); transform:translateY(12px) scale(.98);
+    transition:transform .25s ease;
+  }
+  .mentorship-modal.open .mentorship-dialog{ transform:translateY(0) scale(1); }
+  .mentorship-dialog::after{
+    content:'✦'; position:absolute; right:-.4rem; bottom:-3.4rem; color:rgba(94,230,163,.09); font-size:12rem; line-height:1;
+  }
+  .modal-close{
+    position:absolute; top:.9rem; right:.9rem; z-index:1; width:34px; height:34px; border:1px solid rgba(106,176,243,.35);
+    border-radius:50%; background:rgba(7,17,28,.5); color:var(--text); font-size:1.15rem; line-height:1;
+  }
+  .modal-close:hover{ border-color:var(--green); color:var(--green); }
+  .modal-kicker{ position:relative; margin:0 2.3rem .65rem 0; color:var(--green); font-family:var(--font-mono); font-size:.75rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+  .modal-title{ position:relative; margin:0 0 .65rem; color:var(--text); font-family:var(--font-mono); font-size:clamp(1.35rem,4vw,2rem); line-height:1.25; }
+  .modal-copy{ position:relative; margin:0 0 1.3rem; color:var(--text-dim); }
+  .modal-contacts{ position:relative; display:grid; gap:.65rem; }
+  .modal-contact{
+    display:flex; align-items:center; gap:.75rem; padding:.8rem .9rem; border:1px solid rgba(113,153,193,.27); border-radius:8px;
+    background:rgba(5,13,22,.35); color:var(--text); font-family:var(--font-mono); font-size:.84rem; transition:transform .2s ease, border-color .2s ease;
+  }
+  .modal-contact:hover{ transform:translateX(4px); border-color:var(--blue); color:var(--blue); }
+  .modal-contact-label{ min-width:72px; color:var(--text-faint); font-size:.7rem; text-transform:uppercase; }
 
   /* ---------- Stack ---------- */
+  .stack-command-center{
+    position:relative; display:grid; grid-template-columns:1.1fr .9fr; gap:1rem; margin-bottom:1.6rem;
+  }
+  .stack-module{
+    position:relative; overflow:hidden; border:1px solid rgba(113,153,193,.3); border-radius:12px;
+    background:linear-gradient(145deg, rgba(18,31,46,.94), rgba(15,20,34,.82)); padding:1.35rem;
+  }
+  .stack-module::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(120deg, transparent 35%, rgba(106,176,243,.06), transparent 65%);
+  }
+  .stack-module-head{
+    position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; gap:.75rem;
+    margin-bottom:1.1rem; color:var(--text); font-family:var(--font-mono); font-size:.84rem; font-weight:700;
+  }
+  .stack-live{
+    display:inline-flex; align-items:center; gap:.35rem; color:var(--green); font-size:.7rem; font-weight:500; letter-spacing:.04em;
+  }
+  .stack-live::before{
+    content:''; width:6px; height:6px; border-radius:50%; background:var(--green);
+    box-shadow:0 0 10px var(--green); animation:pulse 1.8s infinite;
+  }
+  .stack-groups{ position:relative; z-index:1; display:grid; grid-template-columns:repeat(2,1fr); gap:.75rem; }
+  .stack-group{
+    padding:.75rem; border:1px solid rgba(113,153,193,.16); border-radius:8px; background:rgba(5,11,19,.3);
+  }
+  .stack-group-label{ display:block; margin-bottom:.5rem; color:var(--blue); font-family:var(--font-mono); font-size:.69rem; letter-spacing:.06em; text-transform:uppercase; }
+  .stack-tools{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .stack-tool{
+    padding:.22rem .45rem; border:1px solid rgba(94,230,163,.18); border-radius:4px; color:var(--text-dim);
+    background:rgba(94,230,163,.04); font-family:var(--font-mono); font-size:.73rem;
+  }
+  .stack-radar{ display:grid; place-items:center; min-height:288px; }
+  .radar{
+    position:relative; width:min(100%,245px); aspect-ratio:1; border:1px solid rgba(106,176,243,.42); border-radius:50%;
+    background:
+      linear-gradient(rgba(106,176,243,.15) 1px, transparent 1px) center/100% 50%,
+      linear-gradient(90deg, rgba(106,176,243,.15) 1px, transparent 1px) center/50% 100%,
+      radial-gradient(circle, rgba(94,230,163,.16), transparent 62%);
+    box-shadow:inset 0 0 35px rgba(45,113,181,.18), 0 0 38px rgba(46,95,172,.12);
+  }
+  .radar::before, .radar::after{ content:''; position:absolute; border:1px solid rgba(106,176,243,.3); border-radius:50%; }
+  .radar::before{ inset:20%; }
+  .radar::after{ inset:39%; }
+  .radar-sweep{
+    position:absolute; inset:0; border-radius:50%; background:conic-gradient(from 0deg, rgba(94,230,163,.28), transparent 42deg, transparent);
+    mask-image:radial-gradient(circle, transparent 0 6px, #000 7px); animation:radarSweep 5s linear infinite;
+  }
+  .radar-core{
+    position:absolute; top:50%; left:50%; width:11px; height:11px; border-radius:50%; background:var(--green);
+    box-shadow:0 0 0 5px rgba(94,230,163,.12), 0 0 20px var(--green); transform:translate(-50%,-50%);
+  }
+  .radar-point{
+    position:absolute; padding:.18rem .4rem; border:1px solid rgba(106,176,243,.38); border-radius:4px;
+    background:rgba(10,14,20,.88); color:var(--text); font-family:var(--font-mono); font-size:.66rem;
+  }
+  .radar-point.one{ top:9%; left:50%; transform:translateX(-50%); }
+  .radar-point.two{ right:-5%; top:48%; }
+  .radar-point.three{ bottom:8%; left:3%; }
+  .radar-point.four{ left:-9%; top:42%; }
+  @keyframes radarSweep{ to{ rotate:360deg; } }
   .yaml-block{
-    background:var(--bg-panel); border:1px solid var(--border); border-radius:8px; padding:1.4rem 1.6rem;
+    background:linear-gradient(135deg, rgba(18,29,43,.96), rgba(15,21,28,.8)); border:1px solid rgba(113,153,193,.28); border-radius:12px; padding:1.4rem 1.6rem;
     font-family:var(--font-mono); font-size:.88rem; overflow-x:auto; margin-bottom:1.6rem; color:var(--text-dim);
   }
   .yaml-block .yk{ color:var(--blue); }
@@ -249,8 +462,9 @@
   .tag-cloud{ display:flex; flex-wrap:wrap; gap:.6rem; }
   .tag{
     font-family:var(--font-mono); font-size:.8rem; color:var(--text-dim); border:1px solid var(--border);
-    padding:.4rem .8rem; border-radius:20px; background:var(--bg-panel);
+    padding:.4rem .8rem; border-radius:20px; background:rgba(19,26,34,.72); transition:transform .2s ease, border-color .2s ease, color .2s ease;
   }
+  .tag:hover{ transform:translateY(-2px); border-color:var(--blue); color:var(--blue); }
 
   /* ---------- Certifications ---------- */
   .k8s-table{ width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:.92rem; }
@@ -276,7 +490,7 @@
 
   /* ---------- Contact ---------- */
   .term-block{
-    background:var(--bg-panel); border:1px solid var(--border); border-radius:8px; padding:1.6rem 1.8rem;
+    background:linear-gradient(135deg, rgba(15,27,39,.95), rgba(17,21,39,.84)); border:1px solid rgba(113,153,193,.28); border-radius:12px; padding:1.6rem 1.8rem;
     font-family:var(--font-mono); font-size:.92rem;
   }
   .ssh-row{ display:flex; align-items:center; gap:.6rem; margin:.5rem 0; color:var(--text-dim); flex-wrap:wrap; }
@@ -311,9 +525,21 @@
     }
     .nav-links.open{ display:flex; }
     .nav-clock{ display:none; }
+    .mentorship-nav-cta{ display:none; }
     .stat-grid{ grid-template-columns:1fr; }
+    .achievement-grid{ grid-template-columns:1fr; }
+    .stack-command-center{ grid-template-columns:1fr; }
+    .stack-radar{ min-height:260px; }
+    .timeline{ padding-left:2rem; }
+    .t-item::before{ left:-2rem; }
     .ssh-row .label{ width:auto; }
     footer{ flex-direction:column; text-align:center; }
+    .hero{ padding-top:4rem; }
+    .hero-orbit{ width:230px; right:-100px; opacity:.55; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    body::before, .hero-orbit::after, .radar-sweep{ animation:none; }
+    .btn, .stat-card, .tag{ transition:none; }
   }
 </style>
 </head>
@@ -343,12 +569,14 @@
         <li><a href="#home" class="active">home</a></li>
         <li><a href="#about">whoami</a></li>
         <li><a href="#timeline">log</a></li>
+        <li><a href="#achievements">wins</a></li>
         <li><a href="#stack">stack</a></li>
         <li><a href="#projects">oss</a></li>
         <li><a href="#certifications">certs</a></li>
         <li><a href="#contact">contact</a></li>
       </ul>
       <div class="nav-clock" id="clock">00:00:00</div>
+      <button class="mentorship-nav-cta mentorship-trigger" type="button">Apply for mentorship</button>
       <button class="theme-toggle mono" id="themeToggle" type="button">$ theme --light</button>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
     </div>
@@ -358,6 +586,7 @@
 
     <!-- ===== Hero ===== -->
     <section id="home" class="hero">
+      <div class="hero-orbit" aria-hidden="true"></div>
       <p class="prompt-line"><span class="prompt">shardul@devops</span>:<span class="path">~</span>$ <span id="heroTyped"></span><span class="cursor"></span></p>
       <h1 class="hero-name">Shardul Kulkarni</h1>
       <p class="hero-role">DevOps Engineer</p>
@@ -387,14 +616,62 @@
 
     <!-- ===== Timeline ===== -->
     <section id="timeline" class="section reveal">
-      <p class="eyebrow">// git log --career --graph</p>
-      <h2 class="section-title">The commit history.</h2>
+      <p class="eyebrow">// journey --career --milestones</p>
+      <h2 class="section-title">From curious builder to platform engineer.</h2>
+      <p class="journey-intro">Each role added a new layer to the stack: software foundations, production systems, platform thinking, and finally the automation that helps teams move with confidence.</p>
       <div class="timeline">
-        <div class="t-item"><span class="t-year">2021</span><span class="t-branch">├──</span><span class="t-desc">Computer engineering degree</span></div>
-        <div class="t-item"><span class="t-year">2021</span><span class="t-branch">├──</span><span class="t-desc">Associate Software Engineer : Veritas Technologies LLC</span></div>
-        <div class="t-item"><span class="t-year">2023</span><span class="t-branch">├──</span><span class="t-desc">Software Engineer : Veritas Technologies LLC</span></div>
-        <div class="t-item"><span class="t-year">2024</span><span class="t-branch">├──</span><span class="t-desc">Member of Technical Staff 2 : Cohesity</span></div>
-        <div class="t-item"><span class="t-year">2024 - Current</span><span class="t-branch">├──</span><span class="t-desc">Software Engineer DevOps R&D : Spectrix</span></div>
+        <div class="t-item">
+          <div class="t-card"><div class="t-topline"><span class="t-year">2021</span><span class="t-phase">Launchpad</span></div><span class="t-desc">Computer Engineering Degree</span><p class="t-detail">Built the engineering fundamentals that turned early curiosity into a career path.</p></div>
+        </div>
+        <div class="t-item">
+          <div class="t-card"><div class="t-topline"><span class="t-year">2021 — 2023</span><span class="t-phase">Foundation</span></div><span class="t-desc">Associate Software Engineer · Veritas Technologies</span><p class="t-detail">Started shipping production software and learning how dependable systems are built.</p></div>
+        </div>
+        <div class="t-item">
+          <div class="t-card"><div class="t-topline"><span class="t-year">2023 — 2024</span><span class="t-phase">Acceleration</span></div><span class="t-desc">Software Engineer · Veritas Technologies</span><p class="t-detail">Expanded ownership, deepened technical craft, and worked closer to the systems behind the product.</p></div>
+        </div>
+        <div class="t-item">
+          <div class="t-card"><div class="t-topline"><span class="t-year">2024</span><span class="t-phase">Scale</span></div><span class="t-desc">Member of Technical Staff 2 · Cohesity</span><p class="t-detail">Took on larger-scale engineering challenges in a fast-moving infrastructure environment.</p></div>
+        </div>
+        <div class="t-item now">
+          <div class="t-card"><div class="t-topline"><span class="t-year">2024 — Present</span><span class="t-phase">Current mission</span></div><span class="t-desc">Software Engineer, DevOps R&amp;D · Spectrix</span><p class="t-detail">Building automation, cloud platforms, and delivery guardrails that make shipping feel effortless.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Achievements ===== -->
+    <section id="achievements" class="section reveal">
+      <p class="eyebrow">// cat achievements.log</p>
+      <h2 class="section-title">Notable missions completed.</h2>
+      <div class="achievement-grid">
+        <article class="achievement-card">
+          <span class="achievement-kicker">First runner up</span>
+          <h3 class="achievement-title">Cloud Cost Optimization using Spot Instances</h3>
+          <p class="achievement-detail">Recognized for using spot-instance strategy to make cloud infrastructure more cost-efficient.</p>
+        </article>
+        <article class="achievement-card">
+          <span class="achievement-kicker">First rank · Best Paper Award</span>
+          <h3 class="achievement-title">Hand Hygiene Monitoring System for Hospital</h3>
+          <p class="achievement-detail">Award-winning paper focused on a monitoring system that supports hospital hand-hygiene practices.</p>
+          <a class="achievement-link" href="https://www.researchgate.net/publication/335527687_Hand_Hygiene_Monitoring_System_for_Hospital" target="_blank" rel="noopener">↗ read the paper</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Mentorship ===== -->
+    <section id="mentorship" class="section reveal">
+      <div class="mentorship-panel">
+        <div class="mentorship-content">
+          <span class="mentorship-label">Mentorship channel open</span>
+          <h2 class="mentorship-title">Your learning journey deserves a reliable guide.</h2>
+          <p class="mentorship-copy">I provide mentorship to help students navigate their learning journey with clarity, practical direction, and confidence. Together, we can turn curiosity into a focused path toward real-world engineering skills.</p>
+          <div class="mentorship-points">
+            <span class="mentorship-point">Learning roadmaps</span>
+            <span class="mentorship-point">DevOps guidance</span>
+            <span class="mentorship-point">Career direction</span>
+            <span class="mentorship-point">Project feedback</span>
+          </div>
+          <button class="btn btn-primary mentorship-trigger" type="button">✦ Apply for mentorship</button>
+        </div>
       </div>
     </section>
 
@@ -402,16 +679,47 @@
     <section id="stack" class="section reveal">
       <p class="eyebrow">// cat skills.yaml</p>
       <h2 class="section-title">The toolchain, declared.</h2>
-      <pre class="yaml-block"><code><span class="yk">containers:</span>    [<span class="yv">Docker</span>, <span class="yv">Kubernetes</span>, <span class="yv">Helm</span>]
-<span class="yk">Programming:</span>           [<span class="yv">Python</span>, <span class="yv">C/C++</span>]
-<span class="yk">cloud:</span>         [<span class="yv">Azure</span>, <span class="yv">Google Cloud</span>]
-<span class="yk">cicd:</span>          [<span class="yv">GitHub Actions</span>, <span class="yv">Jenkins</span>]
-<span class="yk">Scripting and IaC:</span>           [<span class="yv">Bash</span>, <span class="yv">Makefile</span>, <span class="yv">Terraform</span>]
-<span class="yk">Observability</span>           [<span class="yv">Prometheus</span>, <span class="yv">Grafana</span>]
-<span class="yk">Security & Compliance</span>           [<span class="yv">Blackduck</span>, <span class="yv">Trivy</span>]
-<span class="yk">Database</span>           [<span class="yv">MySQL</span>, <span class="yv">MongoDB</span>, <span class="yv">Postgres</span>, <span class="yv">Alembic</span>]
-
-<span class="yk">mode:</span> <span class="ys">"automate everything, break nothing"</span></code></pre>
+      <div class="stack-command-center">
+        <div class="stack-module">
+          <div class="stack-module-head">
+            <span>~/toolchain/control-panel</span>
+            <span class="stack-live">SYSTEMS ONLINE</span>
+          </div>
+          <div class="stack-groups">
+            <div class="stack-group">
+              <span class="stack-group-label">Containers</span>
+              <div class="stack-tools"><span class="stack-tool">Docker</span><span class="stack-tool">Kubernetes</span><span class="stack-tool">Helm</span></div>
+            </div>
+            <div class="stack-group">
+              <span class="stack-group-label">Cloud</span>
+              <div class="stack-tools"><span class="stack-tool">Azure</span><span class="stack-tool">Google Cloud</span></div>
+            </div>
+            <div class="stack-group">
+              <span class="stack-group-label">Automation</span>
+              <div class="stack-tools"><span class="stack-tool">GitHub Actions</span><span class="stack-tool">Jenkins</span><span class="stack-tool">Bash</span><span class="stack-tool">Makefile</span></div>
+            </div>
+            <div class="stack-group">
+              <span class="stack-group-label">IaC &amp; Observability</span>
+              <div class="stack-tools"><span class="stack-tool">Terraform</span><span class="stack-tool">Prometheus</span><span class="stack-tool">Grafana</span></div>
+            </div>
+            <div class="stack-group">
+              <span class="stack-group-label">Security</span>
+              <div class="stack-tools"><span class="stack-tool">Black Duck</span><span class="stack-tool">Trivy</span></div>
+            </div>
+            <div class="stack-group">
+              <span class="stack-group-label">Code &amp; Data</span>
+              <div class="stack-tools"><span class="stack-tool">Python</span><span class="stack-tool">C/C++</span><span class="stack-tool">Postgres</span><span class="stack-tool">MongoDB</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stack-module stack-radar" aria-label="Toolchain radar">
+          <div class="radar" aria-hidden="true">
+            <div class="radar-sweep"></div><div class="radar-core"></div>
+            <span class="radar-point one">CLOUD</span><span class="radar-point two">K8S</span>
+            <span class="radar-point three">IaC</span><span class="radar-point four">CI/CD</span>
+          </div>
+        </div>
+      </div>
       <div class="tag-cloud">
         <span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag">Helm</span>
         <span class="tag">Terraform</span><span class="tag">Azure</span><span class="tag">GKE</span>
@@ -502,6 +810,20 @@
       <a href="#home">back to top ↑</a>
     </div>
   </footer>
+
+  <div class="mentorship-modal" id="mentorshipModal" aria-hidden="true">
+    <div class="mentorship-dialog" role="dialog" aria-modal="true" aria-labelledby="mentorshipModalTitle">
+      <button class="modal-close" id="mentorshipModalClose" type="button" aria-label="Close mentorship contact details">×</button>
+      <p class="modal-kicker">// mentorship contact channel</p>
+      <h2 class="modal-title" id="mentorshipModalTitle">Ready to start your journey?</h2>
+      <p class="modal-copy">Reach out through any channel below to apply for mentorship or ask a question.</p>
+      <div class="modal-contacts">
+        <a class="modal-contact" href="mailto:shardulind@gmail.com?subject=Mentorship%20Application"><span class="modal-contact-label">Email</span><span>shardulind@gmail.com</span></a>
+        <a class="modal-contact" href="https://github.com/shardulind" target="_blank" rel="noopener"><span class="modal-contact-label">GitHub</span><span>github.com/shardulind</span></a>
+        <a class="modal-contact" href="https://linkedin.com/in/shardulind" target="_blank" rel="noopener"><span class="modal-contact-label">LinkedIn</span><span>linkedin.com/in/shardulind</span></a>
+      </div>
+    </div>
+  </div>
 
 <script>
 (function(){
@@ -646,6 +968,34 @@
   themeToggle.addEventListener('click', function(){
     var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
     applyTheme(next);
+  });
+
+  /* ---------- Mentorship modal ---------- */
+  var mentorshipModal = document.getElementById('mentorshipModal');
+  var mentorshipModalClose = document.getElementById('mentorshipModalClose');
+  var mentorshipTriggers = document.querySelectorAll('.mentorship-trigger');
+  var mentorshipLastTrigger = null;
+
+  function closeMentorshipModal(){
+    mentorshipModal.classList.remove('open');
+    mentorshipModal.setAttribute('aria-hidden', 'true');
+    if(mentorshipLastTrigger){ mentorshipLastTrigger.focus(); }
+  }
+
+  mentorshipTriggers.forEach(function(trigger){
+    trigger.addEventListener('click', function(){
+      mentorshipLastTrigger = trigger;
+      mentorshipModal.classList.add('open');
+      mentorshipModal.setAttribute('aria-hidden', 'false');
+      mentorshipModalClose.focus();
+    });
+  });
+  mentorshipModalClose.addEventListener('click', closeMentorshipModal);
+  mentorshipModal.addEventListener('click', function(e){
+    if(e.target === mentorshipModal){ closeMentorshipModal(); }
+  });
+  window.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && mentorshipModal.classList.contains('open')){ closeMentorshipModal(); }
   });
 
   /* ---------- Clock ---------- */
